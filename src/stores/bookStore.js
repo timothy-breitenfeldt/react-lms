@@ -82,6 +82,22 @@ Dispatcher.register(action => {
       bookStore.store.bookState.readState.pending = true;
       bookStore.emitChange();
       break;
+    case "add_books_successful":
+      bookStore.resetReadState();
+      bookStore.store.bookState.bookList = action.data;
+      bookStore.store.bookState.addState.success = true;
+      bookStore.emitChange();
+      break;
+    case "add_books_failure":
+      bookStore.resetReadState();
+      bookStore.store.bookState.addState.failure = true;
+      bookStore.emitChange();
+      break;
+    case "add_books_started":
+      bookStore.resetReadState();
+      bookStore.store.bookState.addState.pending = true;
+      bookStore.emitChange();
+      break;
   }
 });
 

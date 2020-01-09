@@ -3,7 +3,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import BookActions from "../actions/bookActions";
-//import { getBookObject } from "../factories/lmsFactory";
+import { getBookObject } from "../factories/lmsFactory";
+import AddButton from "./buttons/AddButton";
+import { InputModal, toggleModal } from "./modals/InputModal";
 
 export default class BookList extends React.Component {
   createBookRow(book) {
@@ -14,6 +16,10 @@ export default class BookList extends React.Component {
         <td> {book.author} </td>
       </tr>
     );
+  }
+
+  addBook(bookObject) {
+    BookActions.addBook(bookObject);
   }
 
   componentDidMount() {
@@ -35,18 +41,25 @@ export default class BookList extends React.Component {
 
     if (this.props.bookState.readState.success) {
       content = (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Author</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.props.bookState.bookList.map(this.createBookRow, this)}
-          </tbody>
-        </table>
+        <div>
+          <InputModal
+            title="Add New Book"
+            dataObject={getBookObject()}
+            action={this.addBook}
+          />
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.bookState.bookList.map(this.createBookRow, this)}
+            </tbody>
+          </table>
+        </div>
       );
     }
 

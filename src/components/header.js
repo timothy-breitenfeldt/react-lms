@@ -28,6 +28,11 @@ export default function Header() {
               Books
             </Link>
           </li>
+          <li className="list-inline-item">
+            <Link to="/authors" replace>
+              Authors
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
