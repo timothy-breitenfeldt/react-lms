@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Modal from "react-modal";
 import AddButton from "../buttons/AddButton";
 
-export class InputModal extends React.Component {
+export default class InputModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +58,7 @@ export class InputModal extends React.Component {
               let dataName = entry[0];
               let dataValue = entry[1];
               return (
-                <div className="form-group">
+                <div className="form-group" key={dataName}>
                   <label htmlFor={dataName}>{dataName}</label>
                   <input
                     type="text"

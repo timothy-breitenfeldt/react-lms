@@ -2,11 +2,17 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import BookActions from "../../actions/bookActions";
-import { getBookObject } from "../../factories/lmsFactory";
-import { InputModal } from "../modals/InputModal";
+
+import { BookActions } from "../../actions/bookActions";
+import { getBookAuthorObject } from "../../factories/lmsFactory";
+import InputModal from "../modals/InputModal";
 
 export default class BookList extends React.Component {
+  constructor(props) {
+    super(props);
+    document.write(JSON.stringify(props));
+  }
+
   createBookRow(book) {
     return (
       <tr key={book.book_id}>
@@ -22,13 +28,18 @@ export default class BookList extends React.Component {
   }
 
   componentDidMount() {
+    alert("before read");
     BookActions.readBooks();
+    alert("after read");
   }
 
   render() {
     let content = "";
 
-    if (this.props.bookState.readState.pending) {
+    if (
+      this.props.bookState.readState.pending ||
+      this.props.bookState.adState.pending
+    ) {
       content = (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -38,12 +49,15 @@ export default class BookList extends React.Component {
       );
     }
 
-    if (this.props.bookState.readState.success) {
+    if (
+      this.props.bookState.readState.success ||
+      this.props.bookState.adState.success
+    ) {
       content = (
         <div>
           <InputModal
             title="Add New Book"
-            dataObject={getBookObject()}
+            dataObject={getBookAuthorObject()}
             action={this.addBook}
           />
           <table className="table">
@@ -55,14 +69,17 @@ export default class BookList extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.bookState.bookList.map(this.createBookRow, this)}
+              {this.props.bookState.bookList.map(this.createBookRow)}
             </tbody>
           </table>
         </div>
       );
     }
 
-    if (this.props.bookState.readState.failure) {
+    if (
+      this.props.bookState.readState.failure ||
+      this.props.bookState.adState.failure
+    ) {
       content = (
         <div className="alert alert-danger" role="alert">
           Error while loading books!
