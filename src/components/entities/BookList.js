@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import { BookActions } from "../../actions/bookActions";
 import { getBookAuthorObject } from "../../factories/lmsFactory";
 import InputModal from "../modals/InputModal";
+//import UpdateButton from "../buttons/UpdateButton";
+//import DeleteButton from "../buttons/DeleteButton";
 
 export default class BookList extends React.Component {
   constructor(props) {
@@ -18,12 +20,29 @@ export default class BookList extends React.Component {
         <td> {book.bookId} </td>
         <td> {book.title} </td>
         <td> {book.author} </td>
+        {/*
+        <td>
+          <UpdateButton name="Update" handel={} />
+          <DeleteButton name="Delete" handel={} />
+        </td>
+        */}
       </tr>
     );
   }
 
-  addBook(bookObject) {
-    BookActions.addBook(bookObject);
+  addBook(bookAuthorObject) {
+    BookActions.addBook(bookAuthorObject);
+  }
+
+  updateBook(bookAuthorObject) {
+    //Get the value of the first collumn by stepping up to the parentNode of the button target to td, then to tr, then step down to the first element which is the cell with the ID.
+    //const bookId = event.target.parentNode.parentNode.firstChild.innerHTML;
+    //const bookAuthor = this.state.bookState.bookList.filter(b -> b.bookId == bookId)[0];
+    BookActions.updateBook(bookAuthorObject);
+  }
+
+  deleteBook(bookId) {
+    BookActions.deleteBook(bookId);
   }
 
   componentDidMount() {

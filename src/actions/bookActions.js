@@ -16,7 +16,6 @@ export const BookActions = {
         });
       })
       .catch(error => {
-        alert(error);
         console.log(error);
         Dispatcher.dispatch({
           actionType: "read_books_failure",
@@ -41,6 +40,53 @@ export const BookActions = {
         console.log(error);
         Dispatcher.dispatch({
           actionType: "add_books_failure",
+          error: error
+        });
+      });
+  },
+
+  updateBook: function(bookAuthor) {
+    Dispatcher.dispatch({
+      actionType: "update_books_started"
+    });
+
+    axios
+      .put(
+        `http://localhost:3000/bookauthors/id/${bookAuthor.bookId}`,
+        bookAuthor
+      )
+      .then(res => {
+        Dispatcher.dispatch({
+          actionType: "update_books_successful",
+          data: res.data
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        Dispatcher.dispatch({
+          actionType: "update_books_failure",
+          error: error
+        });
+      });
+  },
+
+  deleteBook: function(bookId) {
+    Dispatcher.dispatch({
+      actionType: "delete_books_started"
+    });
+
+    axios
+      .delete(`http://localhost:3000/books/id/${bookId}`)
+      .then(res => {
+        Dispatcher.dispatch({
+          actionType: "delete_books_successful",
+          data: res.data
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        Dispatcher.dispatch({
+          actionType: "delete_books_failure",
           error: error
         });
       });
