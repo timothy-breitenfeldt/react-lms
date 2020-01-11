@@ -11,7 +11,7 @@ export default function DeleteButton(props) {
   );
 }
 
-AddButton.propTypes = {
+DeleteButton.propTypes = {
   name: PropTypes.string.isRequired,
   handel: PropTypes.func.isRequired
 };

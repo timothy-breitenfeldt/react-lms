@@ -61,7 +61,7 @@ Dispatcher.register(action => {
       break;
     case "add_books_successful":
       bookStore.resetReadState();
-      Object.assign(bookStore.store.bookState.bookList, action.data);
+      bookStore.store.bookState.bookList.push(action.data);
       bookStore.store.bookState.readState.success = true;
       bookStore.emitChange();
       break;

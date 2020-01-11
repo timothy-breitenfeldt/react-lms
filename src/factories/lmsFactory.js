@@ -24,9 +24,16 @@ export function getAuthorStateObject() {
   };
 }
 
-export function getBookAuthorObject(title = "", authorName = "") {
+export function getBookAuthorObject(
+  bookId = 0,
+  title = "",
+  authorId = 0,
+  authorName = ""
+) {
   return {
+    bookId: bookId,
     title: title,
+    authorId: authorId,
     author: authorName
   };
 }

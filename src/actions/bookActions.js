@@ -16,6 +16,7 @@ export const BookActions = {
         });
       })
       .catch(error => {
+        alert(error);
         console.log(error);
         Dispatcher.dispatch({
           actionType: "read_books_failure",
@@ -24,16 +25,18 @@ export const BookActions = {
       });
   },
 
-  addBook: function(bookObject) {
+  addBook: function(bookAuthor) {
     Dispatcher.dispatch({
       actionType: "add_books_started"
     });
+
     axios
-      .post(`http://localhost:3000/bookauthors`, bookObject)
+      .post(`http://localhost:3000/bookauthors`, bookAuthor)
       .then(res => {
+        Object.assign(bookAuthor, res.data);
         Dispatcher.dispatch({
           actionType: "add_books_successful",
-          data: res.data
+          data: bookAuthor
         });
       })
       .catch(error => {

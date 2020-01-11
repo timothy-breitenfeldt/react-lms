@@ -11,7 +11,7 @@ export default function UpdateButton(props) {
   );
 }
 
-AddButton.propTypes = {
+UpdateButton.propTypes = {
   name: PropTypes.string.isRequired,
   handel: PropTypes.func.isRequired
 };
