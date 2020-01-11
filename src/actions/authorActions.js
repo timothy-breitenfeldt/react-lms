@@ -1,16 +1,14 @@
 import Dispatcher from "../dispatcher/appDispatcher";
 import axios from "axios";
 
-import { domain } from "./domainConfig";
-
-const AuthorActions = {
+export const AuthorActions = {
   readAuthors: function() {
     Dispatcher.dispatch({
       actionType: "read_authors_started"
     });
 
     axios
-      .get(`${domain}/authors`)
+      .get(`http://localhost:3000/authors`)
       .then(res => {
         Dispatcher.dispatch({
           actionType: "read_authors_successful",
@@ -46,5 +44,3 @@ const AuthorActions = {
       });
   }
 };
-
-module.exports = AuthorActions;

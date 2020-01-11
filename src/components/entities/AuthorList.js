@@ -28,10 +28,7 @@ export default class AuthorList extends React.Component {
   render() {
     let content = "";
 
-    if (
-      this.props.authorState.readState.pending ||
-      this.props.authorState.adState.pending
-    ) {
+    if (this.props.authorState.readState.pending) {
       content = (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -41,10 +38,7 @@ export default class AuthorList extends React.Component {
       );
     }
 
-    if (
-      this.props.authorState.readState.success ||
-      this.props.authorState.adState.success
-    ) {
+    if (this.props.authorState.readState.success) {
       content = (
         <div>
           <InputModal
@@ -67,10 +61,7 @@ export default class AuthorList extends React.Component {
       );
     }
 
-    if (
-      this.props.authorState.readState.failure ||
-      this.props.authorState.adState.failure
-    ) {
+    if (this.props.authorState.readState.failure) {
       content = (
         <div className="alert alert-danger" role="alert">
           Error while loading authors!

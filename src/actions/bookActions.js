@@ -1,13 +1,14 @@
 import Dispatcher from "../dispatcher/appDispatcher";
 import axios from "axios";
 
-const BooksActions = {
+export const BookActions = {
   readBooks: function() {
     Dispatcher.dispatch({
       actionType: "read_books_started"
     });
+
     axios
-      .get(`http://www.mocky.io/v2/5daca80c30000092002987ad`)
+      .get(`http://localhost:3000/bookauthors`)
       .then(res => {
         Dispatcher.dispatch({
           actionType: "read_books_successful",
@@ -15,9 +16,11 @@ const BooksActions = {
         });
       })
       .catch(error => {
+        alert(error);
         console.log(error);
         Dispatcher.dispatch({
-          actionType: "read_books_failure"
+          actionType: "read_books_failure",
+          error: error
         });
       });
   },
@@ -27,7 +30,7 @@ const BooksActions = {
       actionType: "add_books_started"
     });
     axios
-      .post(`http://www.mocky.io/v2/5daca80c30000092002987ad`, bookObject)
+      .post(`http://localhost:3000/bookauthors`, bookObject)
       .then(res => {
         Dispatcher.dispatch({
           actionType: "add_books_successful",
@@ -37,10 +40,9 @@ const BooksActions = {
       .catch(error => {
         console.log(error);
         Dispatcher.dispatch({
-          actionType: "add_books_failure"
+          actionType: "add_books_failure",
+          error: error
         });
       });
   }
 };
-
-module.exports = BooksActions;

@@ -36,30 +36,6 @@ class BookStoreClass extends EventEmitter {
       failure: false
     };
   }
-
-  resetAddState() {
-    this.store.bookState.addState = {
-      pending: false,
-      success: false,
-      failure: false
-    };
-  }
-
-  resetUpdateState() {
-    this.store.bookState.updateState = {
-      pending: false,
-      success: false,
-      failure: false
-    };
-  }
-
-  resetDeleteState() {
-    this.store.bookState.deleteState = {
-      pending: false,
-      success: false,
-      failure: false
-    };
-  }
 }
 
 const bookStore = new BookStoreClass();
@@ -75,6 +51,7 @@ Dispatcher.register(action => {
     case "read_books_failure":
       bookStore.resetReadState();
       bookStore.store.bookState.readState.failure = true;
+      bookStore.store.bookState.error = action.error;
       bookStore.emitChange();
       break;
     case "read_books_started":
@@ -84,18 +61,19 @@ Dispatcher.register(action => {
       break;
     case "add_books_successful":
       bookStore.resetReadState();
-      bookStore.store.bookState.bookList = action.data;
-      bookStore.store.bookState.addState.success = true;
+      Object.assign(bookStore.store.bookState.bookList, action.data);
+      bookStore.store.bookState.readState.success = true;
       bookStore.emitChange();
       break;
     case "add_books_failure":
       bookStore.resetReadState();
-      bookStore.store.bookState.addState.failure = true;
+      bookStore.store.bookState.readState.failure = true;
+      bookStore.store.bookState.error = action.error;
       bookStore.emitChange();
       break;
     case "add_books_started":
       bookStore.resetReadState();
-      bookStore.store.bookState.addState.pending = true;
+      bookStore.store.bookState.readState.pending = true;
       bookStore.emitChange();
       break;
   }

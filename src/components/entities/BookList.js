@@ -10,13 +10,12 @@ import InputModal from "../modals/InputModal";
 export default class BookList extends React.Component {
   constructor(props) {
     super(props);
-    document.write(JSON.stringify(props));
   }
 
   createBookRow(book) {
     return (
-      <tr key={book.book_id}>
-        <td> {book.book_id} </td>
+      <tr key={book.bookId}>
+        <td> {book.bookId} </td>
         <td> {book.title} </td>
         <td> {book.author} </td>
       </tr>
@@ -28,18 +27,13 @@ export default class BookList extends React.Component {
   }
 
   componentDidMount() {
-    alert("before read");
     BookActions.readBooks();
-    alert("after read");
   }
 
   render() {
     let content = "";
 
-    if (
-      this.props.bookState.readState.pending ||
-      this.props.bookState.adState.pending
-    ) {
+    if (this.props.bookState.readState.pending) {
       content = (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -49,10 +43,7 @@ export default class BookList extends React.Component {
       );
     }
 
-    if (
-      this.props.bookState.readState.success ||
-      this.props.bookState.adState.success
-    ) {
+    if (this.props.bookState.readState.success) {
       content = (
         <div>
           <InputModal
@@ -76,10 +67,7 @@ export default class BookList extends React.Component {
       );
     }
 
-    if (
-      this.props.bookState.readState.failure ||
-      this.props.bookState.adState.failure
-    ) {
+    if (this.props.bookState.readState.failure) {
       content = (
         <div className="alert alert-danger" role="alert">
           Error while loading books!

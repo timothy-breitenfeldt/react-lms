@@ -15,6 +15,8 @@ export default class InputModal extends React.Component {
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handelFormChange.bind(this);
+    this.onFormSubmition.bind(this);
   }
 
   openModal() {
@@ -31,8 +33,8 @@ export default class InputModal extends React.Component {
     this.closeModal();
   }
 
-  handelFormChange(target) {
-    this.setState({ [target.name]: target.value });
+  handelFormChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   render() {

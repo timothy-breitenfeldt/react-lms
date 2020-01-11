@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 export default function AddButton(props) {
   return (
     <button className="btn btn-primary btn-lg" onClick={props.handel}>
-      Add {props.name}
+      {props.name}
     </button>
   );
 }

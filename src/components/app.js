@@ -5,7 +5,7 @@ import { Router } from "@reach/router";
 
 import Header from "./header.js";
 import Home from "./home.js";
-import BookList from "../components/BookList";
+import BookList from "./entities/BookList";
 import bookStore from "../stores/bookStore";
 import * as factory from "../factories/lmsFactory";
 

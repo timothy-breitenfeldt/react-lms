@@ -1,6 +1,6 @@
 "use strict";
 
-exports.getBookStateObject = function() {
+export function getBookStateObject() {
   return {
     bookList: [],
     readState: {
@@ -8,33 +8,11 @@ exports.getBookStateObject = function() {
       success: false,
       failure: false
     },
-    addState: {
-      pending: false,
-      success: false,
-      failure: false
-    },
-    updateState: {
-      pending: false,
-      success: false,
-      failure: false
-    },
-    deleteState: {
-      pending: false,
-      success: false,
-      failure: false
-    },
     error: ""
   };
-};
+}
 
-exports.getBookObject = function(title = "", authorName = "") {
-  return {
-    title: title,
-    author: authorName
-  };
-};
-
-exports.getAuthorStateObject = function() {
+export function getAuthorStateObject() {
   return {
     authorList: [],
     readState: {
@@ -44,4 +22,26 @@ exports.getAuthorStateObject = function() {
     },
     error: ""
   };
-};
+}
+
+export function getBookAuthorObject(title = "", authorName = "") {
+  return {
+    title: title,
+    author: authorName
+  };
+}
+
+export function getBookObject(bookId = 0, title = "", authorId = 0) {
+  return {
+    bookId: bookId,
+    title: title,
+    authorId: authorId
+  };
+}
+
+export function getAuthorObject(authorId = 0, name = "") {
+  return {
+    authorId: authorId,
+    name: name
+  };
+}
