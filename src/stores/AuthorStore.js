@@ -36,30 +36,6 @@ class AuthorStoreClass extends EventEmitter {
       failure: false
     };
   }
-
-  resetAddState() {
-    this.store.authorState.addState = {
-      pending: false,
-      success: false,
-      failure: false
-    };
-  }
-
-  resetUpdateState() {
-    this.store.authorState.updateState = {
-      pending: false,
-      success: false,
-      failure: false
-    };
-  }
-
-  resetDeleteState() {
-    this.store.authorState.deleteState = {
-      pending: false,
-      success: false,
-      failure: false
-    };
-  }
 }
 
 const authorStore = new AuthorStoreClass();
@@ -75,27 +51,12 @@ Dispatcher.register(action => {
     case "read_authors_failure":
       authorStore.resetReadState();
       authorStore.store.authorState.readState.failure = true;
+      authorStore.store.authorState.error = action.error;
       authorStore.emitChange();
       break;
     case "read_authors_started":
       authorStore.resetReadState();
       authorStore.store.authorState.readState.pending = true;
-      authorStore.emitChange();
-      break;
-    case "add_authors_successful":
-      authorStore.resetReadState();
-      authorStore.store.authorState.authorList = action.data;
-      authorStore.store.authorState.addState.success = true;
-      authorStore.emitChange();
-      break;
-    case "add_authors_failure":
-      authorStore.resetReadState();
-      authorStore.store.authorState.addState.failure = true;
-      authorStore.emitChange();
-      break;
-    case "add_authors_started":
-      authorStore.resetReadState();
-      authorStore.store.authorState.addState.pending = true;
       authorStore.emitChange();
       break;
   }

@@ -3,22 +3,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { getAuthorObject } from "../../factories/lmsFactory";
 import { AuthorActions } from "../../actions/authorActions";
-import InputModal from "../modals/InputModal";
 
 export default class AuthorList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   createAuthorRow(author) {
     return (
       <tr key={author.authorId}>
         <td> {author.authorId} </td>
-        <td> {author.name} </td>
+        <td> {author.name}</td>
       </tr>
     );
-  }
-
-  addAuthor(authorObject) {
-    AuthorActions.addAuthor(authorObject);
   }
 
   componentDidMount() {
@@ -40,24 +38,17 @@ export default class AuthorList extends React.Component {
 
     if (this.props.authorState.readState.success) {
       content = (
-        <div>
-          <InputModal
-            title="Add New Author"
-            dataObject={getAuthorObject()}
-            action={this.addAuthor}
-          />
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.authorState.authorList.map(this.createAuthorRow)}
-            </tbody>
-          </table>
-        </div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.authorState.authorList.map(this.createAuthorRow)}
+          </tbody>
+        </table>
       );
     }
 

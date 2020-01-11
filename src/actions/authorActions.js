@@ -16,29 +16,9 @@ export const AuthorActions = {
         });
       })
       .catch(error => {
+        console.log(error);
         Dispatcher.dispatch({
           actionType: "read_authors_failure",
-          error: error
-        });
-      });
-  },
-
-  addAuthor: function(authorObject) {
-    Dispatcher.dispatch({
-      actionType: "add_authors_started"
-    });
-
-    axios
-      .post(`$_domain}/authors`, authorObject)
-      .then(res => {
-        Dispatcher.dispatch({
-          actionType: "add_authors_successful",
-          data: res.data
-        });
-      })
-      .catch(error => {
-        Dispatcher.dispatch({
-          actionType: "add_authors_failure",
           error: error
         });
       });
