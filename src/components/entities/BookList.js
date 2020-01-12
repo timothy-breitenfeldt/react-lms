@@ -7,8 +7,8 @@ import Modal from "react-modal";
 import { BookActions } from "../../actions/bookActions";
 import { getBookAuthorObject } from "../../factories/lmsFactory";
 import AddButton from "../buttons/AddButton";
-//import UpdateButton from "../buttons/UpdateButton";
-//import DeleteButton from "../buttons/DeleteButton";
+import UpdateButton from "../buttons/UpdateButton";
+import DeleteButton from "../buttons/DeleteButton";
 
 Modal.setAppElement("#app");
 
@@ -18,27 +18,15 @@ export default class BookList extends React.Component {
     const bookAuthor = getBookAuthorObject();
     Object.assign(bookAuthor, { isModalOpen: false });
     this.state = bookAuthor;
+    this.formMode = "";
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.onAddBookFormSubmition = this.onAddBookFormSubmition.bind(this);
+    this.onDeleteBook = this.onDeleteBook.bind(this);
+    this.setupModalForUpdate = this.setupModalForUpdate.bind(this);
+    this.setupModalForAdd = this.setupModalForAdd.bind(this);
+    this.onModalFormSubmition = this.onModalFormSubmition.bind(this);
     this.handelFormChange = this.handelFormChange.bind(this);
-  }
-
-  createBookRow(book) {
-    return (
-      <tr key={book.bookId}>
-        <td> {book.bookId} </td>
-        <td> {book.title} </td>
-        <td> {book.author} </td>
-        {/*
-        <td>
-          <UpdateButton name="Update" handel={} />
-          <DeleteButton name="Delete" handel={} />
-        </td>
-        */}
-      </tr>
-    );
   }
 
   addBook(bookAuthorObject) {
@@ -46,14 +34,61 @@ export default class BookList extends React.Component {
   }
 
   updateBook(bookAuthorObject) {
-    //Get the value of the first collumn by stepping up to the parentNode of the button target to td, then to tr, then step down to the first element which is the cell with the ID.
-    //const bookId = event.target.parentNode.parentNode.firstChild.innerHTML;
-    //const bookAuthor = this.state.bookState.bookList.filter(b -> b.bookId == bookId)[0];
     BookActions.updateBook(bookAuthorObject);
   }
 
   deleteBook(bookId) {
     BookActions.deleteBook(bookId);
+  }
+
+  onAddBook() {
+    const bookAuthor = getBookAuthorObject();
+    //Copy the properties for the bookAuthor object from this.state to a new object
+    for (let k of Object.keys(bookAuthor)) bookAuthor[k] = this.state[k];
+    this.addBook(bookAuthor);
+  }
+
+  onUpdateBook() {
+    const bookAuthor = getBookAuthorObject();
+    //Copy the properties for the bookAuthor object from this.state to a new object
+    for (let k of Object.keys(bookAuthor)) bookAuthor[k] = this.state[k];
+    this.updateBook(bookAuthor);
+  }
+
+  onDeleteBook(event) {
+    //Get the value of the first collumn by stepping up to the parentNode of the button target to td, then to tr, then step down to the first element which is the cell with the ID.
+    const bookId = event.target.parentNode.parentNode.firstChild.innerHTML;
+    this.deleteBook(bookId);
+  }
+
+  setupModalForAdd() {
+    this.formMode = "ADD";
+    this.setState(getBookAuthorObject());
+    this.openModal();
+  }
+
+  setupModalForUpdate(event) {
+    this.formMode = "UPDATE";
+    const bookId = event.target.parentNode.parentNode.firstChild.innerHTML;
+    const index = this.props.bookState.bookList.findIndex(
+      b => b.bookId == bookId
+    );
+    const bookAuthor = this.props.bookState.bookList[index];
+    //document.getElementsByName("title")[0].value = bookAuthor.title;
+    //document.getElementsByName("author")[0].value = bookAuthor.author;
+    this.setState(bookAuthor);
+    this.openModal();
+  }
+
+  onModalFormSubmition(event) {
+    event.preventDefault();
+    if (this.formMode === "UPDATE") {
+      this.onUpdateBook();
+    } else if (this.formMode === "ADD") {
+      this.onAddBook();
+    }
+    this.formMode = "";
+    this.closeModal();
   }
 
   openModal() {
@@ -64,16 +99,22 @@ export default class BookList extends React.Component {
     this.setState({ isModalOpen: false });
   }
 
-  onAddBookFormSubmition(event) {
-    event.preventDefault();
-    const bookAuthor = getBookAuthorObject();
-    for (let k of Object.keys(bookAuthor)) bookAuthor[k] = this.state[k];
-    this.addBook(bookAuthor);
-    this.closeModal();
-  }
-
   handelFormChange(event) {
     this.setState({ [event.target.name]: event.target.value });
+  }
+
+  createBookRow(book) {
+    return (
+      <tr key={book.bookId}>
+        <td> {book.bookId} </td>
+        <td> {book.title} </td>
+        <td> {book.author} </td>
+        <td>
+          <UpdateButton name="Update" handel={this.setupModalForUpdate} />
+          <DeleteButton name="Delete" handel={this.onDeleteBook} />
+        </td>
+      </tr>
+    );
   }
 
   componentDidMount() {
@@ -94,12 +135,13 @@ export default class BookList extends React.Component {
     }
 
     if (this.props.bookState.readState.success) {
+      const modalTitle = this.formMode == "UPDATE" ? "Update Book" : "Add Book";
       content = (
         <div>
           <Modal
             isOpen={this.state.isModalOpen}
             onRequestClose={this.closeModal}
-            contentLabel="Add Book"
+            contentLabel={modalTitle}
           >
             <button
               type="button"
@@ -109,8 +151,8 @@ export default class BookList extends React.Component {
               Close
             </button>
 
-            <h2>Add Book</h2>
-            <form onSubmit={this.onAddBookFormSubmition}>
+            <h2>{modalTitle}</h2>
+            <form onSubmit={this.onModalFormSubmition}>
               <div className="form-group">
                 <label htmlFor="title">Title</label>
                 <input
@@ -118,8 +160,9 @@ export default class BookList extends React.Component {
                   id="title"
                   className="form-control"
                   name="title"
+                  value={this.state.title}
                   onChange={this.handelFormChange}
-                  required="true"
+                  required
                 />
               </div>
               <div className="form-group">
@@ -129,15 +172,16 @@ export default class BookList extends React.Component {
                   id="author"
                   className="form-control"
                   name="author"
+                  value={this.state.author}
                   onChange={this.handelFormChange}
-                  required="true"
+                  required
                 />
               </div>
               <input type="submit" className="btn btn-primary" value="Submit" />
             </form>
           </Modal>
 
-          <AddButton name="Add Book" handel={this.openModal} />
+          <AddButton name="Add Book" handel={this.setupModalForAdd} />
 
           <table className="table">
             <thead>
@@ -148,7 +192,7 @@ export default class BookList extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.bookState.bookList.map(this.createBookRow)}
+              {this.props.bookState.bookList.map(this.createBookRow, this)}
             </tbody>
           </table>
         </div>

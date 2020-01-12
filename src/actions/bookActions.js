@@ -54,14 +54,11 @@ export const BookActions = {
     });
 
     axios
-      .put(
-        `http://localhost:3000/bookauthors/id/${bookAuthor.bookId}`,
-        bookAuthor
-      )
-      .then(res => {
+      .put(`http://localhost:3000/bookauthors`, bookAuthor)
+      .then(() => {
         Dispatcher.dispatch({
           actionType: "update_books_successful",
-          data: res.data
+          data: bookAuthor
         });
       })
       .catch(error => {
@@ -79,14 +76,15 @@ export const BookActions = {
     });
 
     axios
-      .delete(`http://localhost:3000/books/id/${bookId}`)
-      .then(res => {
+      .delete(`http://localhost:3000/books/${bookId}`)
+      .then(() => {
         Dispatcher.dispatch({
           actionType: "delete_books_successful",
-          data: res.data
+          data: bookId
         });
       })
       .catch(error => {
+        alert(error);
         console.log(error);
         Dispatcher.dispatch({
           actionType: "delete_books_failure",

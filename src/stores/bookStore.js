@@ -42,73 +42,95 @@ const bookStore = new BookStoreClass();
 
 Dispatcher.register(action => {
   switch (action.actionType) {
-    case "read_books_successful":
+    case "read_books_successful": {
       bookStore.resetReadState();
       bookStore.store.bookState.bookList = action.data;
       bookStore.store.bookState.readState.success = true;
       bookStore.emitChange();
       break;
-    case "read_books_failure":
+    }
+    case "read_books_failure": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.failure = true;
       bookStore.store.bookState.error = action.error;
       bookStore.emitChange();
       break;
-    case "read_books_started":
+    }
+    case "read_books_started": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.pending = true;
       bookStore.emitChange();
       break;
-    case "add_books_successful":
+    }
+    case "add_books_successful": {
       bookStore.resetReadState();
       bookStore.store.bookState.bookList.push(action.data);
       bookStore.store.bookState.readState.success = true;
       bookStore.emitChange();
       break;
-    case "add_books_failure":
+    }
+    case "add_books_failure": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.failure = true;
       bookStore.store.bookState.error = action.error;
       bookStore.emitChange();
       break;
-    case "add_books_started":
+    }
+    case "add_books_started": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.pending = true;
       bookStore.emitChange();
       break;
-    case "update_books_successful":
+    }
+    case "update_books_successful": {
       bookStore.resetReadState();
-      bookStore.store.bookState.bookList = action.data;
+      const bookAuthor = action.data;
+      const bookList = bookStore.store.bookState.bookList;
+      const index = bookList.findIndex(b => b.bookId == bookAuthor.bookId);
+      Object.assign(bookList[index], bookAuthor);
       bookStore.store.bookState.readState.success = true;
       bookStore.emitChange();
       break;
-    case "update_books_failure":
+    }
+    case "update_books_failure": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.failure = true;
       bookStore.store.bookState.error = action.error;
       bookStore.emitChange();
       break;
-    case "update_books_started":
+    }
+    case "update_books_started": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.pending = true;
       bookStore.emitChange();
       break;
-    case "delete_books_successful":
+    }
+    case "delete_books_successful": {
       bookStore.resetReadState();
+      //Return book that excludes the deleted book  book from bookList.
+      const bookId = action.data;
+      const bookList = bookStore.store.bookState.bookList;
+      bookList.splice(
+        bookList.findIndex(b => b.bookId === bookId),
+        1
+      );
       bookStore.store.bookState.readState.success = true;
       bookStore.emitChange();
       break;
-    case "delete_books_failure":
+    }
+    case "delete_books_failure": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.failure = true;
       bookStore.store.bookState.error = action.error;
       bookStore.emitChange();
       break;
-    case "delete_books_started":
+    }
+    case "delete_books_started": {
       bookStore.resetReadState();
       bookStore.store.bookState.readState.pending = true;
       bookStore.emitChange();
       break;
+    }
   }
 });
 
